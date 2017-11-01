@@ -1,21 +1,15 @@
-
-;; Add new load path
-
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
+(require 'package) ;; You might already have this line
+(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
 
+
+;; Add new load path
 (add-to-list 'load-path "~/.emacs.d/lisp")
 
 (setq default-frame-alist
       '((top . 200) (left . 400)
         (width . 80) (height . 40)
-;;        (cursor-color . "green")
         (cursor-type . box)
-;;        (foreground-color . "color-250")
-;;        (background-color . "black")
         )
       )
 
@@ -68,57 +62,12 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
 ;; This is for cscope lookup
 (require 'xcscope)
 
 ;; This is important as searches are otherwise very very slow
 (setq cscope-do-not-update-database 1)
-
-;; Enable git in emacs
-;;(load "/usr/share/doc/git-1.7.1/contrib/emacs/git.el")
-
-;; Cscope keymaps
-;;(define-key global-map [(control f3)]  'cscope-set-initial-directory)
-;;(define-key global-map [(control f4)]  'cscope-unset-initial-directory)
-;; (define-key global-map [(control f5)] 'cscope-find-this-symbol)
-;; (define-key global-map [(control f6)] 'cscope-find-global-definition)
-;; (define-key global-map [(control f7)] 'cscope-find-global-definition-no-prompting)
-;; (define-key global-map [(control f8)]  'cscope-pop-mark)
-;; (define-key global-map [(control f9)] 'cscope-next-symbol)
-;; (define-key global-map [(control f10)] 'cscope-next-file)
-;; (define-key global-map [(control f11)] 'cscope-prev-symbol)
-;; (define-key global-map [(control f12)] 'cscope-prev-file)
-;; (define-key global-map [(meta f9)]  'cscope-display-buffer)
-;; (defin-ekey global-map [(meta f10)] 'cscope-display-buffer-toggle)
-
-;; This is for cedet auto-completion and such
-;;(load-file "~/programs/cedet-1.1/common/cedet.el")
-;;(add-to-list 'load-path "~/programs/cedet-1.1/semantic")
-;;(require 'semantic-ia)
-;;(semantic-add-system-include "/proj/pt/home/etorwas/proj_pt/" 'c-mode)
-;;(global-ede-mode 1)                      ;; Enable the Project management system
-;;(semantic-load-enable-code-helpers)      ;; Enable prototype help and smart completion
-;;(global-srecode-minor-mode 1)            ;; Enable template insertion menu
-;; Hooks for cedet auto-completion and such
-;;(defun my-cedet-hook ()
-;;  (local-set-key [(control return)] 'semantic-ia-complete-symbol)
-;;  (local-set-key "\C-c?" 'semantic-ia-complete-symbol-menu)
-;;  (local-set-key "\C-c>" 'semantic-complete-analyze-inline)
-;;  (local-set-key "\C-cp" 'semantic-analyze-proto-impl-toggle))
-;;(add-hook 'c-mode-common-hook 'my-cedet-hook)
-
-;; Try to use cscope database for autocompletion and such
-;;(ede-cpp-root-project "pt"
-;;                :name "pt project"
-;;                :file "/proj/pt/home/etorwas/proj_pt/pt_top/CMakeLists.txt"
-;;                :include-path '("/proj/pt/home/etorwas/proj_pt/pt_top/")
-;;                :system-include-path '("/proj/pt/home/etorwas/proj_pt/pt_top/"))
-
-;;(setq ede-locate-setup-options
-;;      '(ede-locate-cscope
-;;        ede-locate-base))
-;;(semanticdb-enable-cscope-databases)
-;; Define some projects
 
 ;; Toggle window dedication
 (defun toggle-window-dedicated ()
@@ -154,16 +103,6 @@
 ;; only add the vendor path when you want to use the libraries provided with emacs-eclim
 (add-to-list 'load-path (expand-file-name "/home/etorwas/programs/emacs/emacs-eclim/vendor"))
 
-;;(require 'eclim)
-;;(setq eclim-auto-save t)
-;;(global-eclim-mode)
-
-;; Enable auto-completion
-;;(require 'auto-complete-config)
-
-;;(require 'ac-emacs-eclim-source)
-;;(add-hook 'eclim-mode-hook (lambda () (add-to-list 'ac-sources 'ac-source-emacs-eclim)))
-
 ;;for bitbake syntax highlighting.
  (require 'bb-mode)
     (setq auto-mode-alist (cons '("\\.bb$" . bb-mode) auto-mode-alist))
@@ -179,6 +118,6 @@
 ;; Man pages in emacs on F1
 (global-set-key [(f1)] (lambda () (interactive) (manual-entry (current-word))))
 
-;; END OF FILE
-
 (put 'downcase-region 'disabled nil)
+
+;; END OF FILE
