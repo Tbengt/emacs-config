@@ -2,6 +2,55 @@
 (add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/"))
 (package-initialize)
 
+(require 'helm)
+(require 'helm-config)
+
+(global-set-key (kbd "C-c h") 'helm-command-prefix)
+(global-unset-key (kbd "C-x c"))
+
+(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action) ; rebind tab to run persistent action
+(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action) ; make TAB work in terminal
+(define-key helm-map (kbd "C-z")  'helm-select-action) ; list actions using C-z
+
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+(global-set-key (kbd "C-x b") 'helm-mini)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+(global-set-key (kbd "C-c h o") 'helm-occur)
+
+(when (executable-find "curl")
+  (setq helm-google-suggest-use-curl-p t))
+
+(setq helm-split-window-in-side-p           t ; open helm buffer inside current window, not occupy whole other window
+      helm-move-to-line-cycle-in-source     t ; move to end or beginning of source when reaching top or bottom of source.
+      helm-ff-search-library-in-sexp        t ; search for library in `require' and `declare-function' sexp.
+      helm-scroll-amount                    8 ; scroll 8 lines other window using M-<next>/M-<prior>
+      helm-ff-file-name-history-use-recentf t
+      helm-echo-input-in-header-line t)
+
+(setq helm-autoresize-max-height 0)
+(setq helm-autoresize-min-height 20)
+(helm-autoresize-mode 1)
+
+(require 'helm-eshell)
+(add-hook 'eshell-mode-hook
+          #'(lambda ()
+              (define-key eshell-mode-map (kbd "C-c C-l")  'helm-eshell-history)))
+
+(helm-mode 1)
+
+;; (semantic-mode 1)
+
+;; Company
+;;(require 'company)
+
+;;(setq company-clang-executable "/app/vbuild/RHEL6-x86_64/clang/4.0.0/bin/clang")
+
+;;(setq company-backends (delete 'company-semantic company-backends))
+
+;;(global-company-mode 1)
+
+;;(company-begin-backend 'company-clang)
 
 ;; Add new load path
 (add-to-list 'load-path "~/.emacs.d/lisp")
@@ -45,6 +94,10 @@
  '(global-font-lock-mode t)
  '(inhibit-startup-screen t)
  '(menu-bar-mode nil)
+ '(package-selected-packages (quote (haskell-mode company helm)))
+ '(safe-local-variable-values
+   (quote
+    ((company-clang-arguments "-I/proj/pt/ptr3/installs/mvip-x86-generic-3.10-1.4_local_170120191659/montavista/tools/x86_64-gnu/x86_64-montavista-linux-gnu/include/c++/4.7.0/" "-I/proj/pt/ptr3/installs/mvip-x86-generic-3.10-1.4_local_170120191659/montavista/tools/x86_64-gnu/x86_64-montavista-linux-gnu/include/c++/4.7.0/x86_64-montavista-linux-gnu/" "-I/proj/pt/ptr3/installs/mvip-x86-generic-3.10-1.4_local_170120191659/montavista/tools/x86_64-gnu/x86_64-montavista-linux-gnu/include/c++/4.7.0/backward/" "-I/proj/pt/ptr3/installs/mvip-x86-generic-3.10-1.4_local_170120191659/montavista/tools/x86_64-gnu/lib/gcc/x86_64-montavista-linux-gnu/4.7.0/include/" "-I/proj/pt/ptr3/installs/mvip-x86-generic-3.10-1.4_local_170120191659/montavista/tools/x86_64-gnu/lib/gcc/x86_64-montavista-linux-gnu/4.7.0/include-fixed/" "-I/proj/pt/ptr3/installs/mvip-x86-generic-3.10-1.4_local_170120191659/montavista/tools/x86_64-gnu/x86_64-montavista-linux-gnu/include/" "-I/proj/pt/ptr3/installs/mvip-x86-generic-3.10-1.4_local_170120191659/montavista/tools/x86_64-gnu/x86_64-montavista-linux-gnu/sys-root/usr/include/" "-I/workspace/git/etorwas/lime/pt_esw/build/internal/pt6040_dev/pt/includes/" "-I/workspace/git/etorwas/lime/pt_esw/build/internal/pt6040_dev/include/" "-I/workspace/git/etorwas/lime/pt_esw/build/internal/pt6040_dev/include/gsntrace/"))))
  '(scroll-bar-mode nil)
  '(show-paren-mode t)
  '(text-mode-hook (quote (turn-on-auto-fill text-mode-hook-identify)))
@@ -111,13 +164,13 @@
     (setq auto-mode-alist (cons '("\\.bbclass$" . bb-mode) auto-mode-alist))
     (setq auto-mode-alist (cons '("\\.conf$" . bb-mode) auto-mode-alist))
 
-;; Horizontal marker for current line
-;;(global-hl-line-mode 1)
-;;(set-face-background 'hl-line "color-233")
-
 ;; Man pages in emacs on F1
 (global-set-key [(f1)] (lambda () (interactive) (manual-entry (current-word))))
 
 (put 'downcase-region 'disabled nil)
+
+;; Clang formatting
+(load "/app/vbuild/RHEL6-x86_64/clang/4.0.0/share/clang/clang-format.el")
+(global-set-key (kbd "<backtab>") 'clang-format-region)
 
 ;; END OF FILE
